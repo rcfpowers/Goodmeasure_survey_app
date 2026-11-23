@@ -2,7 +2,7 @@
 export const CONFIG = {
   // The Google Apps Script web app URL (ends in /exec). Leave empty to run in demo mode:
   // demo mode sends nothing and accepts links like ?s=staff&v=Demo%20Venue for testing.
-  endpoint: '',
+  endpoint: 'https://script.google.com/macros/s/AKfycbyhCs_corN5JoZ74XQw63CszzvcKOsHcEVzIhTrXCktt53eXNKV-cQScpiUxDm64wFe/exec',
 
   // Shown wherever the surveys offer a private, confidential contact.
   privateContact: '[email or phone]',
