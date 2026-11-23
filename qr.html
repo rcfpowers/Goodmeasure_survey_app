@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>QR codes · Good Measure</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="bar no-print">
+  <span class="mark">good measure</span>
+  <span class="bar-title">QR codes for guest links</span>
+</header>
+<main class="wrap">
+  <form id="qr-form" class="no-print" novalidate>
+    <h1>Make a QR code</h1>
+    <p class="muted">Paste a guest link from the Links sheet (the one with channel “qr”). The code is made in your browser; the link isn’t sent anywhere.</p>
+    <div class="field">
+      <label for="qr-url">Survey link</label>
+      <input type="text" id="qr-url" autocomplete="off" placeholder="https://…/?t=…">
+    </div>
+    <div class="field sub">
+      <label for="qr-venue">Venue name for the printed card</label>
+      <input type="text" id="qr-venue" autocomplete="off">
+    </div>
+    <p class="error small" id="qr-error" role="alert" hidden></p>
+    <div class="actions"><span></span><button type="submit" class="primary">Make QR code</button></div>
+  </form>
+  <section id="qr-card" class="qr-card" hidden>
+    <p class="mark">good measure</p>
+    <h2 id="qr-title">Tell us about your visit</h2>
+    <div id="qr-code" class="qr-code"></div>
+    <p>Scan to answer a few quick questions about <span id="qr-venue-name">this venue</span>. It takes about four minutes and it’s anonymous.</p>
+    <div class="actions no-print"><span></span><button type="button" class="secondary" id="qr-print">Print</button></div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/qr.js"></script>
+</body>
+</html>

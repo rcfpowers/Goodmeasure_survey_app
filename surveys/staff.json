@@ -1,0 +1,106 @@
+{
+  "id": "staff",
+  "version": "SS-0.2",
+  "title": "Staff survey",
+  "minutes": 8,
+  "autosave": false,
+  "scales": {
+    "method": ["Never", "Rarely", "Sometimes", "Usually", "Always", "Not applicable", "Prefer not to answer"]
+  },
+  "intro": {
+    "heading": "About this survey",
+    "paragraphs": [
+      "Good Measure is independently assessing how {venue} works for the people who work there, its guests and its community. This takes about eight minutes.",
+      "Your answers come straight to Good Measure. {venue}’s managers will not see individual answers, names or anything that could identify you.",
+      "In a small team, details in what you write might still point to you, so leave out anything you’d rather keep private. To raise something serious, use the confidential contact at the end instead of this form.",
+      "Please think about the past four weeks unless a question says otherwise. You can skip any question. We delete individual answers by {deleteBy}."
+    ]
+  },
+  "outro": {
+    "heading": "Thank you.",
+    "paragraphs": [
+      "Your answers have gone to Good Measure.",
+      "Want to talk privately? You can speak to the assessor in confidence by {privateContact}. A conversation is confidential but not anonymous: the assessor will know who you are.",
+      "We’ll ask the same questions again in about 30 and 90 days, to see what has changed."
+    ]
+  },
+  "sections": [
+    {
+      "title": "About you",
+      "intro": "These only check the mix of roles, contracts and shifts. They’re never reported for groups smaller than five.",
+      "questions": [
+        { "id": "A1", "measure": "Grouping", "type": "single", "text": "Which area do you mainly work in?", "options": ["Front of house or bar", "Kitchen", "Management or supervision", "Other", "Prefer not to say"] },
+        { "id": "A2", "measure": "C1", "type": "single", "text": "How are you employed?", "options": ["Permanent contract", "Casual or zero-hours", "Agency", "Contracted through another company", "Prefer not to say"] },
+        { "id": "A3", "measure": "Grouping", "type": "single", "text": "When do you usually work?", "options": ["Daytime", "Evenings", "Late nights", "A mix", "Prefer not to say"] },
+        { "id": "A4", "measure": "C5", "type": "single", "text": "How long have you worked here?", "options": ["Under 6 months", "6 to 12 months", "1 to 3 years", "Over 3 years", "Prefer not to say"] }
+      ]
+    },
+    {
+      "title": "The past four weeks",
+      "intro": "For each statement, choose how often it was true. You can add an example if you like.",
+      "questions": [
+        { "id": "SM1", "measure": "C1", "type": "scale", "scale": "method", "example": true, "text": "I received the pay and tips I expected, when I expected them." },
+        { "id": "SM2", "measure": "C1, C4", "type": "scale", "scale": "method", "example": true, "text": "My work arrangements and responsibilities were clear to me." },
+        { "id": "SM3", "measure": "C2", "type": "scale", "scale": "method", "example": true, "text": "I had enough notice of shifts and could take breaks and recover between them." },
+        { "id": "SM4", "measure": "C3, C4", "type": "scale", "scale": "method", "example": true, "text": "The workload and staffing allowed me to work safely." },
+        { "id": "SM5", "measure": "C3", "type": "scale", "scale": "method", "example": true, "text": "I felt safe from harassment and knew where to get help." },
+        { "id": "SM6", "measure": "C4, E1", "type": "scale", "scale": "method", "example": true, "text": "I had the training and authority needed to look after guests and resolve problems." },
+        { "id": "SM7", "measure": "C5", "type": "scale", "scale": "method", "example": true, "text": "I had useful support to learn, develop or settle into the job." },
+        { "id": "SM8", "measure": "C6", "type": "scale", "scale": "method", "example": true, "text": "I could raise a concern without fear, and saw action when action was needed." }
+      ]
+    },
+    {
+      "title": "Pay and hours",
+      "questions": [
+        { "id": "S1", "measure": "C1", "type": "money", "alts": ["Salaried", "Prefer not to say"], "text": "Before tips, what is your hourly rate?", "help": "This is never shown to the venue." },
+        { "id": "S2", "measure": "C1", "type": "single", "text": "Do you have a written statement of your pay, hours and terms?", "options": ["Yes", "No", "Not sure"] },
+        { "id": "S3", "measure": "C1", "type": "single", "text": "Do you know how tips and service charge are shared here?", "options": ["Yes, it’s written down", "Yes, but it isn’t written down", "No", "No tips here"] },
+        { "id": "S4", "measure": "C2", "type": "single", "text": "How many days ahead do you usually see your rota?", "options": ["Less than 3", "3 to 6", "7 to 13", "14 or more"] },
+        { "id": "S5", "measure": "C2", "type": "single", "text": "In the last four weeks, how many of your shifts were changed or cancelled with less than 48 hours’ notice?", "options": ["None", "1", "2 or 3", "4 or more"] },
+        { "id": "S6", "measure": "C2", "type": "single", "text": "In the last four weeks, how often did you have less than 11 hours between finishing one shift and starting the next?", "options": ["Never", "Once", "2 or 3 times", "4 or more times"] },
+        { "id": "S7", "measure": "C2", "type": "scale", "scale": "method", "text": "On shifts longer than six hours, did you get a break of at least 20 minutes?" }
+      ]
+    },
+    {
+      "title": "Safety",
+      "questions": [
+        {
+          "id": "S8", "measure": "C3", "type": "single",
+          "text": "In the last three months, has a guest, colleague or manager harassed or abused you at work?",
+          "options": ["No", "Yes, once", "Yes, more than once", "Prefer not to say"],
+          "alert": { "when": ["Yes, once", "Yes, more than once"], "text": "We’re sorry this happened. If you’d like to talk to someone in confidence, you can contact the assessor: {privateContact}." }
+        },
+        { "id": "S9", "measure": "C3, C6", "type": "single", "showIf": { "id": "S8", "in": ["Yes, once", "Yes, more than once"] }, "text": "Did you report it, and how was it handled?", "options": ["Reported, handled well", "Reported, not handled well", "Didn’t report it", "Prefer not to say"] },
+        { "id": "S10", "measure": "C3", "type": "scale", "scale": "method", "text": "After late shifts, do you have a safe way to get home?" }
+      ]
+    },
+    {
+      "title": "Training and development",
+      "questions": [
+        { "id": "S11", "measure": "C4", "type": "scale", "scale": "method", "text": "In the last four weeks, how often were there enough people on shift to do the job well?" },
+        { "id": "S12", "measure": "C4", "type": "single", "text": "How many hours of paid training have you had in the last 12 months?", "options": ["None", "Under 4", "4 to 10", "Over 10", "Not sure"] },
+        { "id": "S13", "measure": "C5", "type": "single", "text": "In the last six months, has anyone talked with you about your development or progression?", "options": ["Yes", "No"] },
+        { "id": "S14", "measure": "C5", "type": "single", "text": "How likely are you to still be working here in 12 months?", "options": ["Very likely", "Likely", "Unsure", "Unlikely", "Very unlikely"] },
+        { "id": "S15", "measure": "C5, C6", "type": "nps", "text": "On a scale of 0 to 10, how likely are you to recommend {venue} as a place to work?" },
+        { "id": "S16", "measure": "C6", "type": "single", "text": "In the last three months, has something changed because staff raised it?", "options": ["Yes", "No", "Don’t know"] },
+        { "id": "S17", "measure": "I3, C5", "type": "single", "text": "Are you learning skills here you could use in another job?", "options": ["Yes, a lot", "Yes, some", "Not really"] }
+      ]
+    },
+    {
+      "title": "Guests",
+      "questions": [
+        { "id": "S18", "measure": "E1", "type": "scale", "scale": "method", "text": "When it’s busy, do you still have time to greet guests properly?" },
+        { "id": "S19", "measure": "E4", "type": "scale", "scale": "method", "extra": ["Don’t know"], "text": "Are the door and house rules applied the same way to every guest?" }
+      ]
+    },
+    {
+      "title": "In your own words",
+      "intro": "All optional. Leave out anything that could identify you or someone else.",
+      "questions": [
+        { "id": "SM9", "measure": "Care", "type": "text", "long": true, "text": "What should this venue keep doing?" },
+        { "id": "SM10", "measure": "Care", "type": "text", "long": true, "text": "What one thing needs to change?" },
+        { "id": "S20", "measure": "I1, I2, I3, I4", "type": "text", "long": true, "text": "Tell us about a time this venue made a real difference to someone: a guest, a colleague or the local area." }
+      ]
+    }
+  ]
+}

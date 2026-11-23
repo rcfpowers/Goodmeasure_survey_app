@@ -1,0 +1,158 @@
+{
+  "id": "owner",
+  "version": "OS-0.1",
+  "title": "Owner survey",
+  "minutes": 25,
+  "autosave": true,
+  "contactsForm": "owner",
+  "intro": {
+    "heading": "Owner survey for {venue}",
+    "paragraphs": [
+      "This takes about 25 minutes. Figures cover the last 90 days unless a question says 12 months.",
+      "Estimates are fine: for each figure, tell us whether it’s from your records or an estimate. “Don’t know” is always an option, and a gap never counts against the venue.",
+      "On the visit, the assessor will look at a few of the records behind these figures with you, on screen. Nothing needs to be exported."
+    ]
+  },
+  "outro": {
+    "heading": "Thank you.",
+    "paragraphs": [
+      "Your answers have gone to Good Measure.",
+      "On the visit, the assessor will look at a few of the records listed here, on screen. You’ll see a private draft of the results and have five working days to correct anything before it is final.",
+      "We delete individual answers by {deleteBy}. Questions? Contact {privateContact}."
+    ]
+  },
+  "sections": [
+    {
+      "title": "Venue profile",
+      "questions": [
+        { "id": "O1", "measure": "Social role", "type": "multi", "max": 2, "text": "What do people mainly come here for?", "help": "Pick up to two.", "options": ["Retreat", "Table", "Local", "Meeting Place", "Clubhouse", "Cultural Space"] },
+        { "id": "O2", "measure": "P3", "type": "text", "text": "What are your advertised opening days and hours each week?", "help": "For example: Tue to Sat 12:00 to 23:00, Sun 12:00 to 18:00." },
+        { "id": "O3", "measure": "I6", "type": "number", "source": true, "text": "How many customers or covers do you have in a typical week?" },
+        { "id": "O4", "measure": "C1, C2, C5", "type": "fields", "source": true, "text": "How many people work here, by contract?", "fields": [
+          { "key": "ft", "label": "Permanent full-time", "kind": "number" },
+          { "key": "pt", "label": "Permanent part-time", "kind": "number" },
+          { "key": "zero", "label": "Zero or variable hours", "kind": "number" },
+          { "key": "agency", "label": "Agency or contracted", "kind": "number" }
+        ] }
+      ]
+    },
+    {
+      "title": "Your team",
+      "questions": [
+        { "id": "O5", "measure": "C1", "type": "money", "source": true, "text": "What is the lowest hourly rate you pay any adult employee, before tips?" },
+        { "id": "O6", "measure": "C1", "type": "number", "source": true, "text": "How many staff are paid at or above the real Living Wage?" },
+        { "id": "O7", "measure": "C1", "type": "percent", "source": true, "text": "What share of tips and service charge went to staff in the last three months?" },
+        { "id": "O8", "measure": "C1", "type": "single", "text": "Do you have a written tips policy that all staff can see?", "options": ["Yes", "No"] },
+        { "id": "O9", "measure": "C1, C2", "type": "number", "source": true, "text": "How many staff have guaranteed minimum hours in their contract?" },
+        { "id": "O10", "measure": "C2", "type": "number", "unit": "days", "source": true, "text": "How many days ahead do you publish the rota?" },
+        { "id": "O11", "measure": "C2", "type": "single", "text": "Do you pay staff when you cancel a shift at short notice?", "options": ["Always", "Sometimes", "Never", "We don’t cancel shifts"] },
+        { "id": "O12", "measure": "C3", "type": "fields", "source": true, "text": "In the last 12 months, how many staff incidents or accidents were recorded, and how many have a recorded action?", "fields": [
+          { "key": "recorded", "label": "Incidents or accidents recorded", "kind": "number" },
+          { "key": "actioned", "label": "With a recorded action", "kind": "number" }
+        ] },
+        { "id": "O13", "measure": "C3", "type": "single", "text": "Do you have a harassment policy with a way to report outside the line manager?", "options": ["Yes", "No"] },
+        { "id": "O14", "measure": "C3", "type": "single", "text": "What do you provide for staff getting home after late shifts?", "options": ["Paid taxi", "Contribution to travel", "Agreed safe route or buddy", "Nothing formal", "No late shifts"] },
+        { "id": "O15", "measure": "C4", "type": "number", "unit": "hours", "source": true, "text": "How many hours of paid training does a new starter get in their first month?" },
+        { "id": "O16", "measure": "C4", "type": "number", "source": true, "text": "How many staff completed role or safety training in the last 12 months?" },
+        { "id": "O17", "measure": "C5", "type": "number", "source": true, "text": "How many people left in the last 12 months?" },
+        { "id": "O18", "measure": "C5", "type": "number", "source": true, "text": "How many internal promotions were there in the last 12 months?" },
+        { "id": "O19", "measure": "C5, I3", "type": "number", "source": true, "text": "How many qualifications or courses did you fund in the last 12 months, such as WSET or a personal licence?" },
+        { "id": "O20", "measure": "C6", "type": "single", "text": "How often can staff raise issues in a team meeting or one-to-one?", "options": ["Weekly", "Monthly", "Quarterly", "Rarely"] },
+        { "id": "O21", "measure": "C6", "type": "number", "source": true, "text": "How many changes did you make in the last six months because staff raised them?", "followUp": { "text": "Give one example." } }
+      ]
+    },
+    {
+      "title": "Your guests",
+      "questions": [
+        { "id": "O22", "measure": "E1", "type": "fields", "source": true, "text": "In the last 90 days, how many complaints did you receive, and how many got a reply within seven days?", "fields": [
+          { "key": "received", "label": "Complaints received", "kind": "number" },
+          { "key": "replied", "label": "Replied to within seven days", "kind": "number" }
+        ] },
+        { "id": "O23", "measure": "E1", "type": "single", "text": "How do staff know who is a regular or a first-timer?", "options": ["Booking notes", "Pre-shift briefing", "Staff memory", "We don’t"] },
+        { "id": "O24", "measure": "E2", "type": "number", "source": true, "text": "How many seats suit solo guests or mixing, such as bar stools or communal tables?" },
+        { "id": "O25", "measure": "E3", "type": "single", "text": "Is there a quieter area or a quieter time each day?", "options": ["Yes, an area", "Yes, a time", "Both", "No"] },
+        { "id": "O26", "measure": "E3", "type": "single", "text": "Do you use a sound limiter or set music levels by time of day?", "options": ["Yes", "No"] },
+        { "id": "O27", "measure": "E4", "type": "fields", "source": true, "text": "In the last 90 days, how many guest incidents and refusals did you record?", "fields": [
+          { "key": "incidents", "label": "Guest incidents", "kind": "number" },
+          { "key": "refusals", "label": "Refusals", "kind": "number" }
+        ] },
+        { "id": "O28", "measure": "E4", "type": "multi", "text": "Which safety schemes are you part of?", "help": "Select any that apply.", "options": ["Ask for Angela", "Best Bar None", "Women’s Night Safety Charter", "Pubwatch", "Other", "None"], "exclusive": "None", "other": "Other" },
+        { "id": "O29", "measure": "E5", "type": "fields", "source": true, "text": "Alcohol-free and low-alcohol drinks: how many are on the menu, and how do prices compare?", "fields": [
+          { "key": "count", "label": "Alcohol-free or low-alcohol drinks on the menu", "kind": "number" },
+          { "key": "af", "label": "Cheapest alcohol-free adult drink", "kind": "money" },
+          { "key": "pint", "label": "Cheapest pint or glass of house wine", "kind": "money" }
+        ] },
+        { "id": "O30", "measure": "E6", "type": "single", "text": "Do you count repeat guests?", "options": ["Yes", "No"] },
+        { "id": "O30a", "measure": "E6", "type": "percent", "source": true, "showIf": { "id": "O30", "in": ["Yes"] }, "text": "What share of guests visited twice or more in the last 90 days?" }
+      ]
+    },
+    {
+      "title": "Your place",
+      "questions": [
+        { "id": "O31", "measure": "P1", "type": "multi", "text": "Which of these do you have?", "help": "Select any that apply.", "options": ["Step-free entrance", "Accessible toilet", "Hearing loop", "Published access information", "Quiet or sensory-friendly session", "Large-print or digital menu"] },
+        { "id": "O32", "measure": "P1", "type": "fields", "source": true, "text": "In the last 90 days, how many access requests did you receive, and how many did you meet?", "fields": [
+          { "key": "received", "label": "Access requests received", "kind": "number" },
+          { "key": "met", "label": "Requests met", "kind": "number" }
+        ] },
+        { "id": "O33", "measure": "P2", "type": "fields", "source": true, "text": "What do your cheapest items cost?", "fields": [
+          { "key": "pint", "label": "Cheapest pint or glass of house wine", "kind": "money" },
+          { "key": "soft", "label": "Cheapest soft drink", "kind": "money" },
+          { "key": "food", "label": "Cheapest snack or main", "kind": "money" }
+        ] },
+        { "id": "O34", "measure": "P2", "type": "fields", "text": "Which of these charges apply?", "help": "Write the amount or %, and whether it’s optional. Leave blank if it doesn’t apply.", "fields": [
+          { "key": "entry", "label": "Entry fee", "kind": "text" },
+          { "key": "deposit", "label": "Deposit", "kind": "text" },
+          { "key": "minspend", "label": "Minimum spend", "kind": "text" },
+          { "key": "service", "label": "Service charge", "kind": "text" }
+        ] },
+        { "id": "O35", "measure": "P2", "type": "number", "source": true, "text": "How many free or lower-cost offers do you run each week, such as early-evening prices or free events?" },
+        { "id": "O36", "measure": "P3", "type": "number", "source": true, "text": "On how many days did you close unexpectedly in the last 90 days?" },
+        { "id": "O37", "measure": "P4", "type": "fields", "source": true, "text": "How many local groups or organisations do you work with, and how many changes did you make after community feedback in the last 12 months?", "fields": [
+          { "key": "groups", "label": "Local groups or organisations", "kind": "number" },
+          { "key": "changes", "label": "Changes after community feedback", "kind": "number" }
+        ], "followUp": { "text": "Give one example of a change." } },
+        { "id": "O38", "measure": "P5", "type": "fields", "source": true, "text": "In the last 90 days, how many regular activities did you plan, how many ran, and what was typical attendance?", "fields": [
+          { "key": "planned", "label": "Activities planned", "kind": "number" },
+          { "key": "ran", "label": "Activities that ran", "kind": "number" },
+          { "key": "attendance", "label": "Typical attendance", "kind": "number" }
+        ] },
+        { "id": "O39", "measure": "P6, I2", "type": "single", "text": "Do community groups get space free or at reduced cost?", "options": ["Yes", "No"] },
+        { "id": "O39a", "measure": "P6, I2", "type": "fields", "source": true, "showIf": { "id": "O39", "in": ["Yes"] }, "text": "How many hours did you give in the last 90 days, and what is your usual room hire fee?", "fields": [
+          { "key": "hours", "label": "Hours given", "kind": "number" },
+          { "key": "fee", "label": "Usual room hire fee", "kind": "money" }
+        ] },
+        { "id": "O40", "measure": "P6", "type": "single", "text": "Do you have entry or membership rules beyond licensing law?", "options": ["Yes", "No"], "followUp": { "text": "Describe the rules.", "when": ["Yes"] } }
+      ]
+    },
+    {
+      "title": "Your impact",
+      "questions": [
+        { "id": "O41", "measure": "I2", "type": "fields", "source": true, "text": "How many groups meet here regularly, and what is their total attendance in a typical month?", "fields": [
+          { "key": "groups", "label": "Groups meeting regularly", "kind": "number" },
+          { "key": "attendance", "label": "Total attendance in a typical month", "kind": "number" }
+        ] },
+        { "id": "O42", "measure": "I2, I5", "type": "money", "source": true, "text": "What was the value of free space, donations or sponsorship you gave in the last 12 months?" },
+        { "id": "O43", "measure": "I3", "type": "number", "source": true, "text": "How many people outside your own team did you train in the last 12 months, through apprenticeships, placements, masterclasses or mentoring?" },
+        { "id": "O44", "measure": "I4", "type": "fields", "source": true, "text": "In the last 90 days, how many performers, DJs or artists did you pay, what was the total, and how many were paid within 30 days?", "fields": [
+          { "key": "count", "label": "Performers, DJs or artists paid", "kind": "number" },
+          { "key": "total", "label": "Total paid", "kind": "money" },
+          { "key": "ontime", "label": "Paid within 30 days", "kind": "number" }
+        ] },
+        { "id": "O45", "measure": "I4", "type": "percent", "source": true, "text": "What share of those fees met the Musicians’ Union minimum rates?" },
+        { "id": "O46", "measure": "I5", "type": "fields", "source": true, "text": "Roughly what share of your food and drink spend goes to local and independent suppliers?", "fields": [
+          { "key": "local", "label": "Suppliers within {localRadius} miles", "kind": "percent" },
+          { "key": "indep", "label": "Independent businesses", "kind": "percent" }
+        ] },
+        { "id": "O47", "measure": "I5", "type": "number", "unit": "days", "source": true, "text": "What are your usual payment terms with suppliers?" },
+        { "id": "O48", "measure": "I6", "type": "fields", "source": true, "text": "How much energy did you use in the last 12 months?", "help": "Fill in whichever you have.", "fields": [
+          { "key": "kwh", "label": "Energy used (kWh)", "kind": "number" },
+          { "key": "bills", "label": "Or total energy bills", "kind": "money" }
+        ] },
+        { "id": "O48a", "measure": "I6", "type": "single", "text": "Is your energy tariff renewable?", "options": ["Yes", "No", "Don’t know"] },
+        { "id": "O49", "measure": "I6", "type": "multi", "text": "Which waste streams do you collect separately?", "help": "Select any that apply.", "options": ["General", "Mixed recycling", "Glass", "Food", "Cooking oil"] },
+        { "id": "O49a", "measure": "I6", "type": "number", "unit": "kg", "source": true, "text": "What was your total waste weight in the last 12 months, if known?" },
+        { "id": "O50", "measure": "P4, I1, I2, I3, I4", "type": "single", "text": "Can you name two guests, two group organisers and two performers or partners we could contact, with their permission?", "help": "If yes, we’ll ask for their details on a separate form after you send this survey.", "options": ["Yes", "No"] }
+      ]
+    }
+  ]
+}

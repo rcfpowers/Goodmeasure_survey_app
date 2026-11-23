@@ -1,0 +1,64 @@
+{
+  "id": "customer",
+  "version": "CS-0.2",
+  "title": "Tell us about your visit",
+  "minutes": 4,
+  "autosave": false,
+  "contactsForm": "guest",
+  "intro": {
+    "heading": "Tell us about your visit",
+    "paragraphs": [
+      "Good Measure is independently assessing {venue}. This takes about four minutes.",
+      "It’s anonymous: we don’t ask your name, and the venue doesn’t see individual answers. You can skip any question."
+    ]
+  },
+  "outro": {
+    "heading": "Thank you.",
+    "paragraphs": [
+      "Your answers have gone to Good Measure.",
+      "Something you’d rather tell us privately? Contact {privateContact}. We handle it separately from this survey."
+    ]
+  },
+  "sections": [
+    {
+      "title": "Your visit",
+      "questions": [
+        { "id": "GM1", "measure": "Social role, E2", "type": "single", "text": "What did you come for today?", "help": "Pick the main one.", "options": ["Quiet company", "Time with companions", "Familiar faces", "Meeting people", "A shared activity", "Music or a live occasion", "Something else (tell us)"], "other": "Something else (tell us)" },
+        { "id": "GM2", "measure": "E1, E6", "type": "single", "text": "Is this your first visit? If not, roughly how often do you come?", "options": ["First visit", "Weekly or more", "A few times a month", "About once a month", "A few times a year", "Less often"] },
+        { "id": "GM3", "measure": "E2", "type": "single", "text": "Did you get the social experience you wanted?", "options": ["Fully", "Partly", "No", "Unsure"], "followUp": { "text": "What helped or got in the way? (optional)" } },
+        { "id": "GM4", "measure": "E1", "type": "single", "text": "Did you feel acknowledged and treated with care?", "options": ["Fully", "Partly", "No", "Unsure"] },
+        {
+          "id": "GM5", "measure": "E4", "type": "single", "text": "Did you feel safe, respected and able to take part?", "options": ["Fully", "Partly", "No", "Unsure"],
+          "alert": { "when": ["Partly", "No"], "text": "If you’d like to tell us about this privately, contact {privateContact}. We handle it separately from this survey." }
+        },
+        { "id": "GM6", "measure": "E3, P1", "type": "multi", "text": "Did sound, light, seating, access or service pace make your visit difficult?", "help": "Select any that apply.", "options": ["Sound", "Light", "Seating", "Access", "Service pace", "None of these"], "exclusive": "None of these", "followUp": { "text": "Tell us more (optional)" } },
+        { "id": "GM7", "measure": "E5", "type": "single", "text": "Could you choose how much to drink, including alcohol-free options, without pressure?", "options": ["Yes", "Partly", "No", "Not relevant"] },
+        { "id": "GM8", "measure": "E6", "type": "text", "long": true, "text": "What would bring you back, or stop you returning?" },
+        { "id": "GM9", "measure": "E2, I1", "type": "single", "text": "If you met or reconnected with someone, was that welcome?", "options": ["I didn’t meet or reconnect with anyone", "Yes, it was welcome", "No, it wasn’t welcome", "Prefer not to say"] }
+      ]
+    },
+    {
+      "title": "A bit more",
+      "questions": [
+        { "id": "G1", "measure": "E2", "type": "single", "text": "Are you here on your own or with others?", "options": ["On my own", "With others", "Prefer not to say"] },
+        { "id": "G2", "measure": "E6", "type": "single", "text": "How likely are you to come back in the next three months?", "options": ["Very likely", "Likely", "Unsure", "Unlikely", "Very unlikely"] },
+        { "id": "G3", "measure": "E6", "type": "nps", "text": "On a scale of 0 to 10, how likely are you to recommend {venue} to a friend?" },
+        { "id": "G4", "measure": "P2", "type": "single", "text": "Roughly how much did you spend per person today?", "options": ["Nothing", "Under £10", "£10 to £20", "£20 to £40", "£40 to £60", "Over £60", "Prefer not to say"] },
+        { "id": "G5", "measure": "P2", "type": "single", "text": "Was it good value for what you spent?", "options": ["Yes", "Partly", "No", "Unsure"] },
+        { "id": "G6", "measure": "P2", "type": "single", "text": "Were there any costs you didn’t expect, such as a deposit, service charge or minimum spend?", "options": ["Yes", "No", "Unsure"] },
+        { "id": "G7", "measure": "P4", "type": "single", "text": "How long did it take you to get here?", "options": ["Under 15 minutes", "15 to 30 minutes", "30 to 60 minutes", "Over an hour"] },
+        { "id": "G8", "measure": "P5, I2", "type": "single", "text": "Have you taken part in a regular activity here, such as a quiz, club, class or community night?", "options": ["Yes, regularly", "Once or twice", "No"] },
+        { "id": "G9", "measure": "I1", "type": "single", "text": "Have you got to know someone here whom you now see or talk to outside the venue?", "options": ["Yes", "No", "Prefer not to say"] },
+        { "id": "G10", "measure": "P4, I2", "type": "single", "text": "Does this place help you feel part of the local community?", "options": ["Fully", "Partly", "No", "Unsure"] }
+      ]
+    },
+    {
+      "title": "About you (optional)",
+      "intro": "Only share what you’re comfortable with.",
+      "questions": [
+        { "id": "G11", "measure": "E3, P1", "type": "text", "long": true, "text": "Is there anything about your needs that would help us understand your answers?", "help": "In your own words." },
+        { "id": "G12", "measure": "P4", "type": "single", "text": "Which age group are you in?", "options": ["Under 25", "25 to 34", "35 to 49", "50 to 64", "65 or over", "Prefer not to say"] }
+      ]
+    }
+  ]
+}
