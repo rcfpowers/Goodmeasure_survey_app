@@ -100,7 +100,7 @@ input:focus, select:focus, textarea:focus { outline: 3px solid var(--focus); out
 .sub { margin-top: 12px; clear: both; }
 .sub label, .field label { display: block; font-size: 16px; color: var(--muted); margin-bottom: 6px; }
 .num-field { display: flex; align-items: center; gap: 8px; max-width: 320px; clear: both; }
-.num-field .affix { color: var(--muted); }
+.num-field .affix { color: var(--muted); white-space: nowrap; }
 .fields { display: grid; gap: 14px; clear: both; }
 .field .num-field { max-width: 320px; }
 

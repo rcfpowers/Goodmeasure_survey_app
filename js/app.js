@@ -161,6 +161,8 @@ function keysFor(q) {
   const keys = [q.id];
   if (q.other) keys.push(`${q.id}_other`);
   if (q.fields) q.fields.forEach(f => keys.push(`${q.id}_${f.key}`));
+  if (q.per) keys.push(`${q.id}_per`);
+  if (q.hourly) keys.push(`${q.id}_hourly`);
   if (q.followUp) keys.push(`${q.id}_more`);
   if (q.example) keys.push(`${q.id}_example`);
   if (q.source) keys.push(`${q.id}_source`);
@@ -177,6 +179,8 @@ function collectAnswers() {
         if (value === undefined) continue;
         if (key === `${q.id}_other` && !matches(q.id, [q.other])) continue;
         if (key === `${q.id}_more` && q.followUp.when && !matches(q.id, q.followUp.when)) continue;
+        if ((key === `${q.id}_per` || key === `${q.id}_hourly`) && typeof state.answers[q.id] !== 'number') continue;
+        if (key === `${q.id}_hourly` && !salaried(q)) continue;
         if (Array.isArray(value)) value = value.join('; ');
         if (typeof value === 'string') value = value.trim();
         if (value === '') continue;
@@ -423,7 +427,7 @@ function control(q) {
     case 'text': return textInput(q.id, q.long, `${q.id}-label`);
     case 'number':
     case 'money':
-    case 'percent': return numberInput(q.id, q.type, q.unit, `${q.id}-label`, q.alts);
+    case 'percent': return numberInput(q.id, q.type, q.unit, `${q.id}-label`, q.alts, q.per ? periodChoice(q) : null);
     case 'fields': return fieldGroup(q);
     default: return h('p', { class: 'error', text: `Unknown question type: ${q.type}` });
   }
@@ -510,7 +514,7 @@ function conditionalText(key, label, when) {
   return block;
 }
 
-function numberInput(key, kind, unit, labelledBy, alts) {
+function numberInput(key, kind, unit, labelledBy, alts, afterField) {
   const input = h('input', { type: 'number', inputmode: 'decimal', min: '0', step: 'any', id: `${key}-num`, 'aria-labelledby': labelledBy });
   if (kind === 'percent') input.max = '100';
   const error = h('p', { class: 'error small', hidden: true });
@@ -536,7 +540,7 @@ function numberInput(key, kind, unit, labelledBy, alts) {
     input,
     kind === 'percent' ? h('span', { class: 'affix', text: '%' }) : null,
     unit ? h('span', { class: 'affix', text: unit }) : null);
-  const wrap = h('div', { class: 'num' }, field, error);
+  const wrap = h('div', { class: 'num' }, field, error, afterField);
 
   if (alts && alts.length) {
     const altWrap = h('div', { class: 'options alts' });
@@ -581,6 +585,29 @@ function fieldGroup(q) {
     grid.append(h('div', { class: 'field' }, label, input));
   }
   return grid;
+}
+
+// Pay period for a money question ("per": [...]); the first option is the hourly one.
+function periodChoice(q) {
+  const key = `${q.id}_per`;
+  const group = h('fieldset', { class: 'inline-radios' }, h('legend', { text: 'That’s' }));
+  group.append(radioGroup(key, q.per));
+  const box = h('div', {}, group);
+  if (q.hourly) {
+    const hourlyKey = `${q.id}_hourly`;
+    const labelId = `${hourlyKey}-label`;
+    const sub = h('div', { class: 'sub' },
+      h('label', { id: labelId, for: `${hourlyKey}-num`, text: fill(q.hourly) }),
+      numberInput(hourlyKey, 'money', 'per hour', labelId));
+    state.watchers.push(() => { sub.hidden = !salaried(q); });
+    box.append(sub);
+  }
+  return box;
+}
+
+function salaried(q) {
+  const per = state.answers[`${q.id}_per`];
+  return Boolean(per) && per !== q.per[0];
 }
 
 function followUp(q) {
