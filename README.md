@@ -21,6 +21,8 @@ venue-surveys/
 3. Answers are sent to the Apps Script, which checks the code is live and writes one row to `Staff responses`, `Customer responses` or `Owner responses`. Columns are added automatically, named by question ID (for example `SM1`, `S8`, `O4_ft`, `O5_source`).
 4. Guest follow-up sign-ups and the people owners name go to a separate `Contacts` sheet, never next to the answers. You can point this at a separate, more restricted spreadsheet (see Settings).
 
+5. Each visit also sends small progress records to a `Progress` sheet: one row when someone opens the survey (step 0), one for each part they reach (steps 1 to n), and one when they send it (the last step, named `Sent`). These carry a random visit ID, the part reached and active seconds so far, never answers. Each response row also gets `time_total` and `time_p1`, `time_p2`… columns: active seconds overall and on each part. Time with the page hidden doesn't count.
+
 The owner survey saves on the owner's device as they go, so they can close it and come back on the same link and device. Staff and customer surveys keep nothing on the device.
 
 ## Try it locally (demo mode)
@@ -49,7 +51,14 @@ Use a Good Measure business Google account, not a personal Gmail, so the data si
    - "Anyone" is needed because staff and guests answer without signing in. If the option is missing, your Google Workspace admin may need to allow it.
 5. Paste the URL into `endpoint` in `js/config.js`, and fill in `privateContact` and `deleteBy`.
 
-When you change `Code.gs` later, use **Deploy → Manage deployments → Edit → New version** so the URL stays the same.
+When you change `Code.gs` later, paste in the new version, save, run `setup` again (it only adds sheets that are missing), then use **Deploy → Manage deployments → Edit → New version** so the URL stays the same.
+
+## Reading drop-off and timings
+
+- **Where people stop:** on the `Progress` sheet, insert a pivot table with `step_name` (or `step`) as rows, filtered by `venue_code` and `survey`, and **COUNTUNIQUE of visit_id** as values. The count at each step is how many visits got that far; the biggest fall between two steps is where people give up.
+- **Opened but never started:** visits at step 0 minus visits at step 1.
+- **Rushed answers:** in the response sheets, sort by `time_total` or a part's `time_p…`. Answers given much faster than reading speed allows (for example under a minute for the staff survey) are worth checking for the same answer picked every time.
+- The owner survey can be finished over several sittings; its times cover only the sitting in which it was sent.
 
 ## Publish on GitHub Pages
 
@@ -73,6 +82,7 @@ To close a survey, set `open` to `FALSE` for the venue, or `active` to `FALSE` f
 
 - Staff and customer answers carry no names, emails or IP addresses. Free-text answers can still identify people, so review them before sharing anything.
 - Google doesn't guarantee that Sheets data stays in the UK except on Enterprise plans. Say so in the privacy notice and data sharing agreement.
+- Progress records and timings hold no answers or identifiers. The visit ID is random, made fresh for each visit and not stored on the device. Mention in the privacy notice that the survey records which parts are reached and how long they take.
 - Answers that start with `=`, `+`, `-` or `@` are stored as plain text so they can't run as spreadsheet formulas.
 - Delete individual answers by the deletion date you set in `deleteBy`.
 

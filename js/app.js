@@ -13,8 +13,12 @@ const state = {
   answers: {},
   submitted: null,
   watchers: [],
-  sending: false
+  sending: false,
+  demoPings: []
 };
+
+// One visit = one person going through the survey once. Holds no answers.
+const visit = { id: null, page: null, since: 0, secs: {}, reached: -1 };
 
 // ---------- small helpers ----------
 
@@ -71,6 +75,71 @@ async function post(payload) {
   });
   return res.json();
 }
+
+// ---------- progress and timings ----------
+// Records which page each visit reaches and the active time spent on each page
+// (time with the page hidden doesn't count). Sent separately from answers.
+
+function startVisit() {
+  visit.id = randomId();
+  visit.page = null;
+  visit.since = 0;
+  visit.secs = {};
+  visit.reached = -1;
+  ping(0, 'Intro');
+}
+
+function stopClock() {
+  if (visit.page !== null && visit.since) {
+    visit.secs[visit.page] = (visit.secs[visit.page] || 0) + (performance.now() - visit.since) / 1000;
+  }
+  visit.since = 0;
+}
+
+function enterPage(index) {
+  stopClock();
+  visit.page = index;
+  visit.since = document.hidden ? 0 : performance.now();
+  if (index > visit.reached) {
+    visit.reached = index;
+    ping(index + 1, state.survey.sections[index].title);
+  }
+}
+
+function activeSeconds() {
+  stopClock();
+  if (visit.page !== null && !document.hidden) visit.since = performance.now();
+  return Object.values(visit.secs).reduce((a, b) => a + b, 0);
+}
+
+function timingAnswers() {
+  const total = activeSeconds();
+  const out = { time_total: Math.round(total) };
+  state.survey.sections.forEach((_, i) => {
+    if (visit.secs[i] !== undefined) out[`time_p${i + 1}`] = Math.round(visit.secs[i]);
+  });
+  return out;
+}
+
+function ping(step, name) {
+  if (!visit.id || params.get('view') === 'all') return;
+  const payload = {
+    type: 'progress', token: state.link.token, version: state.survey.version,
+    visit: visit.id, step, name, secs: Math.round(activeSeconds())
+  };
+  if (DEMO) { state.demoPings.push(payload); return; }
+  fetch(CONFIG.endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+    keepalive: true
+  }).catch(() => { /* progress is best effort */ });
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopClock();
+  else if (visit.page !== null) visit.since = performance.now();
+});
 
 // ---------- start-up ----------
 
@@ -163,6 +232,7 @@ function keysFor(q) {
   if (q.fields) q.fields.forEach(f => keys.push(`${q.id}_${f.key}`));
   if (q.per) keys.push(`${q.id}_per`);
   if (q.hourly) keys.push(`${q.id}_hourly`);
+  if (q.fallback) keys.push(`${q.id}_${q.fallback.key}`);
   if (q.followUp) keys.push(`${q.id}_more`);
   if (q.example) keys.push(`${q.id}_example`);
   if (q.source) keys.push(`${q.id}_source`);
@@ -181,6 +251,7 @@ function collectAnswers() {
         if (key === `${q.id}_more` && q.followUp.when && !matches(q.id, q.followUp.when)) continue;
         if ((key === `${q.id}_per` || key === `${q.id}_hourly`) && typeof state.answers[q.id] !== 'number') continue;
         if (key === `${q.id}_hourly` && !salaried(q)) continue;
+        if (q.fallback && key === `${q.id}_${q.fallback.key}` && state.answers[q.id] !== q.fallback.when) continue;
         if (Array.isArray(value)) value = value.join('; ');
         if (typeof value === 'string') value = value.trim();
         if (value === '') continue;
@@ -193,8 +264,10 @@ function collectAnswers() {
 
 // ---------- screens ----------
 
-function renderIntro() {
+function renderIntro(newVisit = true) {
   const s = state.survey;
+  if (newVisit) startVisit();
+  else { stopClock(); visit.page = null; }
   const resumed = s.autosave && Object.keys(state.answers).length > 0;
   app.replaceChildren(
     h('h1', { text: fill(s.intro.heading) }),
@@ -242,12 +315,13 @@ function renderPage(index) {
     ...section.questions.map(renderQuestion),
     errorBox,
     h('div', { class: 'actions' },
-      h('button', { type: 'button', class: 'secondary', onclick: () => (index === 0 ? renderIntro() : renderPage(index - 1)) }, 'Back'),
+      h('button', { type: 'button', class: 'secondary', onclick: () => (index === 0 ? renderIntro(false) : renderPage(index - 1)) }, 'Back'),
       h('button', { type: 'submit', class: 'primary' }, last ? 'Send my answers' : 'Next'))
   );
 
   app.replaceChildren(form);
   state.watchers.forEach(fn => fn());
+  enterPage(index);
   focusTop();
 }
 
@@ -268,11 +342,12 @@ function renderAll() {
 async function submit(errorBox, form) {
   if (state.sending) return;
   const answers = collectAnswers();
-  const payload = { type: 'response', token: state.link.token, version: state.survey.version, answers };
+  const payload = { type: 'response', token: state.link.token, version: state.survey.version, answers: { ...answers, ...timingAnswers() } };
   state.submitted = answers;
 
   if (DEMO) {
     clearDraft();
+    ping(state.survey.sections.length + 1, 'Sent');
     return renderOutro(payload);
   }
 
@@ -284,6 +359,8 @@ async function submit(errorBox, form) {
     const result = await post(payload);
     if (!result || !result.ok) throw new Error(result?.message || 'Not saved');
     clearDraft();
+    ping(state.survey.sections.length + 1, 'Sent');
+    visit.id = null;
     renderOutro();
   } catch (err) {
     console.error(err);
@@ -311,7 +388,12 @@ function renderOutro(demoPayload) {
     }, 'Start again for the next guest')));
   }
   if (demoPayload) {
-    app.append(h('details', {}, h('summary', { text: 'Demo mode: what would be sent' }), h('pre', { text: JSON.stringify(demoPayload, null, 2) })));
+    app.append(h('details', {}, h('summary', { text: 'Demo mode: what would be sent' }),
+      h('pre', { text: JSON.stringify(demoPayload, null, 2) }),
+      h('p', { class: 'muted', text: 'Progress records (saved to the Progress sheet, separate from answers):' }),
+      h('pre', { text: state.demoPings.map(p => JSON.stringify(p)).join('\n') })));
+    state.demoPings = [];
+    visit.id = null;
   }
   focusTop();
 }
@@ -410,6 +492,7 @@ function renderQuestion(q) {
   box.append(h('legend', { id: `${q.id}-label` }, fill(q.text)));
   if (q.help) box.append(h('p', { class: 'help', text: fill(q.help) }));
   box.append(control(q));
+  if (q.fallback) box.append(fallbackChoice(q));
   if (q.followUp) box.append(followUp(q));
   if (q.example) box.append(textBlock(`${q.id}_example`, 'Give an example (optional)', true));
   if (q.source) box.append(sourceChoice(q));
@@ -593,6 +676,7 @@ function periodChoice(q) {
   const group = h('fieldset', { class: 'inline-radios' }, h('legend', { text: 'That’s' }));
   group.append(radioGroup(key, q.per));
   const box = h('div', {}, group);
+  state.watchers.push(() => { box.hidden = typeof state.answers[q.id] === 'string'; });
   if (q.hourly) {
     const hourlyKey = `${q.id}_hourly`;
     const labelId = `${hourlyKey}-label`;
@@ -603,6 +687,15 @@ function periodChoice(q) {
     box.append(sub);
   }
   return box;
+}
+
+// Closed ranges offered when someone can't give an exact figure ("fallback": {when, key, text, options}).
+function fallbackChoice(q) {
+  const key = `${q.id}_${q.fallback.key}`;
+  const group = h('fieldset', { class: 'inline-radios' }, h('legend', { text: fill(q.fallback.text) }));
+  group.append(radioGroup(key, q.fallback.options));
+  state.watchers.push(() => { group.hidden = state.answers[q.id] !== q.fallback.when; });
+  return group;
 }
 
 function salaried(q) {

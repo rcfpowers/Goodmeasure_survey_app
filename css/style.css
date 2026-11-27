@@ -94,7 +94,7 @@ input[type="text"], input[type="number"], input[type="email"], input[type="tel"]
   padding: 10px 12px;
   width: 100%;
 }
-textarea { min-height: 96px; resize: vertical; }
+textarea { min-height: 160px; resize: vertical; }
 input:focus, select:focus, textarea:focus { outline: 3px solid var(--focus); outline-offset: 1px; }
 
 .sub { margin-top: 12px; clear: both; }

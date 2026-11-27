@@ -12,7 +12,8 @@ const SHEETS = {
   staff: 'Staff responses',
   customer: 'Customer responses',
   owner: 'Owner responses',
-  contacts: 'Contacts'
+  contacts: 'Contacts',
+  progress: 'Progress'
 };
 
 const CHANNELS = {
@@ -24,6 +25,9 @@ const CHANNELS = {
 const CONTACT_KINDS = { 'guest-followup': 'customer', 'owner-named': 'owner' };
 const FIXED_COLUMNS = ['response_id', 'received_at', 'venue_code', 'channel', 'version'];
 const CONTACT_COLUMNS = ['contact_id', 'received_at', 'venue_code', 'kind', 'role', 'name', 'contact', 'participant_id'];
+// One row each time a visit reaches a page: 0 = intro, 1..n = parts, n+1 = sent. No answers.
+const PROGRESS_COLUMNS = ['received_at', 'venue_code', 'survey', 'channel', 'version', 'visit_id', 'step', 'step_name', 'active_secs'];
+const VISIT_PATTERN = /^[a-f0-9-]{16,40}$/i;
 const MAX_BODY = 100000;
 const MAX_KEYS = 400;
 const MAX_VALUE = 5000;
@@ -45,7 +49,8 @@ function setup() {
   ensureSheet(ss, SHEETS.settings, ['key', 'value', 'notes'], [
     ['base_url', 'https://YOUR-ACCOUNT.github.io/venue-surveys/', 'Where the survey pages are published, ending in /'],
     ['contacts_spreadsheet_id', '', 'Optional: ID of a separate, more restricted spreadsheet for contact details'],
-    ['max_per_10_min', '300', 'Most submissions accepted per link in any 10 minutes']
+    ['max_per_10_min', '300', 'Most submissions accepted per link in any 10 minutes'],
+    ['max_progress_per_10_min', '3000', 'Most progress records accepted per link in any 10 minutes']
   ]);
   ensureSheet(ss, SHEETS.venues, ['code', 'name', 'open', 'notes'], [
     ['DEMO', 'Demo Venue', true, 'Example row: replace with real venues']
@@ -54,6 +59,7 @@ function setup() {
   ensureSheet(ss, SHEETS.staff, FIXED_COLUMNS);
   ensureSheet(ss, SHEETS.customer, FIXED_COLUMNS);
   ensureSheet(ss, SHEETS.owner, FIXED_COLUMNS);
+  ensureSheet(ss, SHEETS.progress, PROGRESS_COLUMNS);
   if (!setting_('contacts_spreadsheet_id')) ensureSheet(ss, SHEETS.contacts, CONTACT_COLUMNS);
   ss.toast('Sheets are ready. Add venues, then use Good Measure > Create links.', 'Good Measure', 8);
 }
@@ -113,7 +119,12 @@ function doPost(e) {
     const venue = findVenue_(link.venue_code);
     if (!venue || !venue.open) return json_({ ok: false, message: 'This survey is closed.' });
     if (!CHANNELS[link.survey] || CHANNELS[link.survey].indexOf(link.channel) < 0) return json_({ ok: false, message: 'This link is set up incorrectly.' });
-    if (!withinRateLimit_(link.token)) return json_({ ok: false, message: 'Too many submissions. Please try again later.' });
+    // Progress records have their own limit and skip the lock, so they never hold up real answers.
+    if (data.type === 'progress') {
+      if (!withinRateLimit_(link.token, 'rlp_', 'max_progress_per_10_min', 3000)) return json_({ ok: false });
+      return json_(saveProgress_(link, data));
+    }
+    if (!withinRateLimit_(link.token, 'rl_', 'max_per_10_min', 300)) return json_({ ok: false, message: 'Too many submissions. Please try again later.' });
 
     const lock = LockService.getScriptLock();
     lock.waitLock(20000);
@@ -160,6 +171,22 @@ function saveResponse_(link, data) {
   keys.forEach(function (k) { record[k] = clean_(answers[k]); });
   sheet.appendRow(header.map(function (col) { return Object.prototype.hasOwnProperty.call(record, col) ? record[col] : ''; }));
   return { ok: true, id: id };
+}
+
+function saveProgress_(link, data) {
+  const visit = String(data.visit || '');
+  const step = Number(data.step);
+  const secs = Number(data.secs);
+  if (!VISIT_PATTERN.test(visit) || !isFinite(step) || step < 0 || step > 100 || Math.floor(step) !== step) return { ok: false };
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEETS.progress) || ensureSheet(ss, SHEETS.progress, PROGRESS_COLUMNS);
+  sheet.appendRow([
+    new Date(), link.venue_code, link.survey, link.channel,
+    clean_(String(data.version || '').slice(0, 20)), visit, step,
+    clean_(String(data.name || '').slice(0, 80)),
+    isFinite(secs) && secs >= 0 ? Math.min(Math.round(secs), 86400) : ''
+  ]);
+  return { ok: true };
 }
 
 function saveContacts_(link, data) {
@@ -252,11 +279,11 @@ function truthy_(value) {
   return text === 'true' || text === 'yes' || text === 'open';
 }
 
-function withinRateLimit_(token) {
+function withinRateLimit_(token, prefix, settingKey, fallback) {
   const cache = CacheService.getScriptCache();
-  const key = 'rl_' + token;
+  const key = prefix + token;
   const count = Number(cache.get(key) || 0);
-  const max = Number(setting_('max_per_10_min') || 300);
+  const max = Number(setting_(settingKey) || fallback);
   if (count >= max) return false;
   cache.put(key, String(count + 1), 600);
   return true;

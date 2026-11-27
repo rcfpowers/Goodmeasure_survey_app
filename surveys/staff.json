@@ -1,6 +1,6 @@
 {
   "id": "staff",
-  "version": "SS-0.3",
+  "version": "SS-0.4",
   "title": "Staff survey",
   "minutes": 5,
   "autosave": false,
@@ -10,9 +10,7 @@
       "Rarely",
       "Sometimes",
       "Usually",
-      "Always",
-      "Not applicable",
-      "Prefer not to answer"
+      "Always"
     ]
   },
   "intro": {
@@ -34,115 +32,49 @@
   },
   "sections": [
     {
-      "title": "About you",
-      "intro": "These only check the mix of shifts and experience. They’re never reported for groups smaller than five.",
-      "questions": [
-        {
-          "id": "A3",
-          "measure": "Grouping",
-          "type": "single",
-          "text": "When do you usually work?",
-          "options": [
-            "Daytime",
-            "Evenings",
-            "Late nights",
-            "A mix",
-            "Prefer not to say"
-          ]
-        },
-        {
-          "id": "A4",
-          "measure": "C5",
-          "type": "fields",
-          "text": "How long have you worked here?",
-          "help": "A rough figure is fine.",
-          "fields": [
-            {
-              "key": "years",
-              "label": "Years",
-              "kind": "number"
-            },
-            {
-              "key": "months",
-              "label": "Months",
-              "kind": "number"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "title": "The past four weeks",
-      "intro": "For each statement, choose how often it was true.",
+      "intro": "Each question is about the past four weeks.",
       "questions": [
         {
           "id": "SM1",
           "measure": "C1",
           "type": "scale",
           "scale": "method",
-          "text": "I received the pay and tips I expected, when I expected them."
+          "text": "How often was your pay correct and on time?"
         },
         {
           "id": "SM2",
           "measure": "C1, C4",
           "type": "scale",
           "scale": "method",
-          "text": "My work arrangements and responsibilities were clear to me."
+          "text": "How often were you clear about what was expected of you on shift?"
         },
         {
           "id": "SM3",
           "measure": "C2",
           "type": "scale",
           "scale": "method",
-          "text": "I had enough notice of shifts and could take breaks and recover between them."
+          "text": "How often did you get the breaks you were due?"
         },
         {
           "id": "SM4",
           "measure": "C3, C4",
           "type": "scale",
           "scale": "method",
-          "text": "The workload and staffing allowed me to work safely."
+          "text": "How often did you feel safe doing your job?"
         },
         {
           "id": "SM5",
           "measure": "C3",
           "type": "scale",
           "scale": "method",
-          "text": "I felt safe from harassment and knew where to get help."
+          "text": "How often did you feel safe from harassment at work?"
         },
         {
-          "id": "SM6",
-          "measure": "C4, E1",
-          "type": "scale",
-          "scale": "method",
-          "text": "I had the training and authority needed to look after guests and resolve problems."
-        }
-      ]
-    },
-    {
-      "title": "Pay and hours",
-      "questions": [
-        {
-          "id": "S1",
-          "measure": "C1",
-          "type": "money",
-          "per": [
-            "Per hour",
-            "Per month",
-            "Per year"
-          ],
-          "hourly": "If you’re salaried, roughly what does that work out to per hour?",
-          "alts": [
-            "Prefer not to say"
-          ],
-          "text": "Before tips, what is your pay?",
-          "help": "Give it per hour, month or year, whichever you know best. This is never shown to the venue."
-        },
-        {
-          "id": "S2",
-          "measure": "C1",
+          "id": "SM5b",
+          "measure": "C3, C6",
           "type": "single",
-          "text": "Do you have a written statement of your pay, hours and terms?",
+          "text": "Do you know who to go to if you’re harassed at work?",
           "options": [
             "Yes",
             "No",
@@ -150,39 +82,13 @@
           ]
         },
         {
-          "id": "S3",
-          "measure": "C1",
-          "type": "single",
-          "text": "Do you know how tips and service charge are shared here?",
-          "options": [
-            "Yes, it’s written down",
-            "Yes, but it isn’t written down",
-            "No",
-            "No tips here"
-          ]
-        },
-        {
-          "id": "S4",
-          "measure": "C2",
-          "type": "single",
-          "text": "How many days ahead do you usually see your rota?",
-          "options": [
-            "Less than 3",
-            "3 to 6",
-            "7 to 13",
-            "14 or more"
-          ]
-        },
-        {
-          "id": "S6",
-          "measure": "C2",
-          "type": "single",
-          "text": "In the last four weeks, how often did you have less than 11 hours between finishing one shift and starting the next?",
-          "options": [
-            "Never",
-            "Once",
-            "2 or 3 times",
-            "4 or more times"
+          "id": "SM6",
+          "measure": "C4, E1",
+          "type": "scale",
+          "scale": "method",
+          "text": "How often could you sort out a guest’s problem yourself?",
+          "extra": [
+            "I don’t deal with guests"
           ]
         }
       ]
@@ -195,7 +101,10 @@
           "measure": "C3",
           "type": "scale",
           "scale": "method",
-          "text": "After late shifts, do you have a safe way to get home?"
+          "text": "After a late shift, how often do you have a safe way to get home?",
+          "extra": [
+            "I don’t work late shifts"
+          ]
         }
       ]
     },
@@ -216,20 +125,10 @@
           "text": "How many hours of training have you had for the role you’re in now?",
           "options": [
             "None",
-            "Under 4",
-            "4 to 10",
-            "Over 10",
+            "Under 4 hours",
+            "4 to 10 hours",
+            "More than 10 hours",
             "Not sure"
-          ]
-        },
-        {
-          "id": "S13",
-          "measure": "C5",
-          "type": "single",
-          "text": "In the last six months, has anyone talked with you about your development or progression?",
-          "options": [
-            "Yes",
-            "No"
           ]
         },
         {
@@ -283,7 +182,91 @@
           "measure": "E1",
           "type": "scale",
           "scale": "method",
-          "text": "Is there someone free to greet guests properly when they arrive?"
+          "text": "How often is someone free to greet guests properly when they arrive?",
+          "extra": [
+            "Don’t know"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pay and hours",
+      "questions": [
+        {
+          "id": "S1",
+          "measure": "C1",
+          "type": "money",
+          "per": [
+            "Per hour",
+            "Per month",
+            "Per year"
+          ],
+          "hourly": "If you’re salaried, roughly what does that work out to per hour?",
+          "alts": [
+            "Not sure",
+            "Prefer not to say"
+          ],
+          "text": "Before tips, what is your pay?",
+          "help": "Give it per hour, month or year, whichever you know best. This is never shown to the venue.",
+          "fallback": {
+            "when": "Not sure",
+            "key": "band",
+            "text": "Roughly what is it per hour?",
+            "options": [
+              "Less than £12.71",
+              "£12.71 to £13.49",
+              "£13.50 to £14.99",
+              "£15 to £17.99",
+              "£18 or more"
+            ]
+          }
+        },
+        {
+          "id": "S2",
+          "measure": "C1",
+          "type": "single",
+          "text": "Do you have a written statement of your pay, hours and terms?",
+          "options": [
+            "Yes",
+            "No",
+            "Not sure"
+          ]
+        },
+        {
+          "id": "S3",
+          "measure": "C1",
+          "type": "single",
+          "text": "Do you know how tips and service charge are shared here?",
+          "options": [
+            "Yes, it’s written down",
+            "Yes, but it isn’t written down",
+            "No",
+            "No tips here"
+          ]
+        },
+        {
+          "id": "S4",
+          "measure": "C2",
+          "type": "single",
+          "text": "How many days ahead do you usually see your rota?",
+          "options": [
+            "Less than 3",
+            "3 to 6",
+            "7 to 13",
+            "14 or more"
+          ]
+        },
+        {
+          "id": "S6",
+          "measure": "C2",
+          "type": "single",
+          "text": "In the last four weeks, how often did you have less than 11 hours between finishing one shift and starting the next?",
+          "options": [
+            "Never",
+            "Once",
+            "2 or 3 times",
+            "4 or more times"
+          ]
         }
       ]
     },
@@ -298,6 +281,44 @@
           "long": true,
           "text": "Tell us about a time this venue made a real difference to someone: a guest, a colleague or the local area.",
           "help": "Please don’t name anyone or include details that could identify them."
+        }
+      ]
+    },
+    {
+      "title": "About you",
+      "intro": "These only check the mix of shifts and experience. They’re never reported for groups smaller than five.",
+      "questions": [
+        {
+          "id": "A3",
+          "measure": "Grouping",
+          "type": "single",
+          "text": "When do you usually work?",
+          "options": [
+            "Daytime",
+            "Evenings",
+            "Late nights",
+            "A mix",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "id": "A4",
+          "measure": "C5",
+          "type": "fields",
+          "text": "How long have you worked here?",
+          "help": "A rough figure is fine.",
+          "fields": [
+            {
+              "key": "years",
+              "label": "Years",
+              "kind": "number"
+            },
+            {
+              "key": "months",
+              "label": "Months",
+              "kind": "number"
+            }
+          ]
         }
       ]
     }
